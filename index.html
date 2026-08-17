@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>StudyAI</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -15,38 +21,68 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f5f7fb;
+      background: #f6f7fb;
       color: #111827;
     }
 
     header {
+      height: 65px;
       background: white;
       border-bottom: 1px solid #e5e7eb;
-      padding: 18px 25px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .logo {
       font-size: 24px;
-      font-weight: bold;
+      font-weight: 800;
       color: #4f46e5;
     }
 
-    .login-button {
-      background: #4f46e5;
-      color: white;
+    .nav {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav button {
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-size: 14px;
+      background: transparent;
       cursor: pointer;
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .nav button:hover {
+      color: #4f46e5;
+    }
+
+    .login {
+      background: #4f46e5 !important;
+      color: white !important;
+      padding: 9px 16px;
+      border-radius: 8px;
+    }
+
+    .page {
+      display: none;
+      max-width: 1000px;
+      margin: auto;
+      padding: 50px 20px;
+    }
+
+    .page.active {
+      display: block;
     }
 
     .hero {
       text-align: center;
-      padding: 70px 20px 45px;
+      padding: 45px 10px;
     }
 
     .hero h1 {
@@ -59,37 +95,32 @@
     }
 
     .hero p {
-      font-size: 19px;
       color: #6b7280;
+      font-size: 18px;
+      line-height: 1.6;
       max-width: 650px;
       margin: auto;
-      line-height: 1.6;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .upload-box {
+    .upload {
       background: white;
       border: 2px dashed #c7d2fe;
-      border-radius: 16px;
-      padding: 45px 25px;
+      border-radius: 18px;
+      padding: 45px 20px;
       text-align: center;
+      margin-top: 20px;
     }
 
     .upload-icon {
-      font-size: 45px;
+      font-size: 48px;
       margin-bottom: 15px;
     }
 
-    .upload-box h2 {
+    .upload h2 {
       margin-bottom: 10px;
     }
 
-    .upload-box p {
+    .upload p {
       color: #6b7280;
       margin-bottom: 20px;
     }
@@ -108,355 +139,716 @@
       display: none;
     }
 
-    .file-name {
-      margin-top: 20px;
-      font-weight: bold;
+    #fileName {
+      margin-top: 15px;
       color: #4f46e5;
+      font-weight: bold;
     }
 
-    .generate-button {
+    .generate {
       display: none;
-      margin: 25px auto 0;
+      margin: 20px auto;
+      padding: 14px 25px;
       background: #111827;
       color: white;
       border: none;
-      padding: 14px 30px;
       border-radius: 9px;
       font-size: 16px;
-      font-weight: bold;
       cursor: pointer;
     }
 
-    .generate-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .result {
-      display: none;
-      background: white;
-      margin-top: 30px;
-      padding: 30px;
-      border-radius: 15px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .result h2 {
-      margin-bottom: 15px;
-    }
-
-    .result pre {
-      white-space: pre-wrap;
-      font-family: Arial, sans-serif;
-      color: #374151;
-      line-height: 1.7;
-    }
-
-    .features {
+    .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 20px;
       margin-top: 35px;
     }
 
-    .feature {
+    .card {
       background: white;
-      padding: 25px;
-      border-radius: 14px;
       border: 1px solid #e5e7eb;
+      border-radius: 15px;
+      padding: 25px;
     }
 
-    .feature-icon {
-      font-size: 30px;
-      margin-bottom: 12px;
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 15px;
     }
 
-    .feature h3 {
-      margin-bottom: 8px;
+    .card h3 {
+      margin-bottom: 10px;
     }
 
-    .feature p {
+    .card p {
       color: #6b7280;
       line-height: 1.5;
     }
 
+    .section-title {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .placeholder {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .placeholder h2 {
+      margin-bottom: 10px;
+    }
+
+    .placeholder p {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .price-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 30px;
+    }
+
+    .price-card.pro {
+      border: 2px solid #4f46e5;
+    }
+
+    .price {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .price span {
+      font-size: 15px;
+      color: #6b7280;
+    }
+
+    .price-card ul {
+      list-style: none;
+      margin: 20px 0;
+    }
+
+    .price-card li {
+      margin: 12px 0;
+      color: #4b5563;
+    }
+
+    .upgrade-button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 9px;
+      background: #4f46e5;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     footer {
       text-align: center;
-      padding: 50px 20px;
       color: #9ca3af;
+      padding: 50px 20px;
     }
 
     @media (max-width: 700px) {
+
+      header {
+        padding: 0 15px;
+      }
+
+      .nav {
+        gap: 8px;
+      }
+
+      .nav button {
+        font-size: 12px;
+      }
+
       .hero h1 {
         font-size: 36px;
       }
 
-      .features {
+      .cards {
         grid-template-columns: 1fr;
       }
+
+      .pricing {
+        grid-template-columns: 1fr;
+      }
+
     }
+
   </style>
+
 </head>
 
 <body>
 
-  <header>
-    <div class="logo">StudyAI</div>
 
-    <button class="login-button" onclick="login()">
-      Log In
+<header>
+
+  <div
+    class="logo"
+    onclick="showPage('home')"
+    style="cursor:pointer"
+  >
+    StudyAI
+  </div>
+
+  <div class="nav">
+
+    <button onclick="showPage('home')">
+      Home
     </button>
-  </header>
 
-  <section class="hero">
+    <button onclick="showPage('study')">
+      Study
+    </button>
+
+    <button onclick="showPage('flashcards')">
+      Flashcards
+    </button>
+
+    <button onclick="showPage('quiz')">
+      Quiz
+    </button>
+
+    <button
+      class="login"
+      onclick="showPage('upgrade')"
+    >
+      Upgrade
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- HOME -->
+
+<section
+  id="home"
+  class="page active"
+>
+
+  <div class="hero">
 
     <h1>
-      Study smarter with <span>AI.</span>
+      Study smarter with
+      <span>AI.</span>
     </h1>
 
     <p>
-      Upload your notes and let StudyAI turn them into
-      summaries, flashcards, and practice questions.
+      Upload your study material and turn it
+      into summaries, flashcards, and practice
+      questions.
     </p>
 
-  </section>
+  </div>
 
-  <main class="container">
 
-    <div class="upload-box">
+  <div class="upload">
 
-      <div class="upload-icon">
-        📚
+    <div class="upload-icon">
+      📚
+    </div>
+
+    <h2>
+      Upload your study material
+    </h2>
+
+    <p>
+      Start with a TXT file containing your notes.
+    </p>
+
+    <label class="upload-button">
+
+      Choose File
+
+      <input
+        type="file"
+        id="fileInput"
+        accept=".txt"
+        onchange="fileSelected()"
+      >
+
+    </label>
+
+    <div id="fileName"></div>
+
+  </div>
+
+
+  <button
+    id="generateButton"
+    class="generate"
+    onclick="generateStudyMaterials()"
+  >
+    ✨ Generate Study Materials
+  </button>
+
+
+  <div class="cards">
+
+    <div class="card">
+
+      <div class="card-icon">
+        🧠
       </div>
 
-      <h2>
-        Upload your study material
-      </h2>
+      <h3>
+        AI Study Guides
+      </h3>
 
       <p>
-        Upload a text file containing your notes.
+        Turn your notes into simple,
+        organized study guides.
       </p>
 
-      <label class="upload-button">
-        Choose File
+    </div>
 
-        <input
-          type="file"
-          id="fileInput"
-          accept=".txt"
-          onchange="fileSelected()"
-        >
 
-      </label>
+    <div class="card">
 
-      <div
-        class="file-name"
-        id="fileName">
+      <div class="card-icon">
+        📝
       </div>
+
+      <h3>
+        Flashcards
+      </h3>
+
+      <p>
+        Create flashcards from the
+        most important information.
+      </p>
 
     </div>
 
-    <button
-      class="generate-button"
-      id="generateButton"
-      onclick="generateStudyMaterials()">
 
-      ✨ Generate Study Materials
+    <div class="card">
 
-    </button>
+      <div class="card-icon">
+        ❓
+      </div>
 
-    <div
-      class="result"
-      id="result">
+      <h3>
+        Practice Quizzes
+      </h3>
+
+      <p>
+        Test yourself with questions
+        based on your notes.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- STUDY -->
+
+<section
+  id="study"
+  class="page"
+>
+
+  <h1 class="section-title">
+    Study Guide
+  </h1>
+
+  <p class="section-subtitle">
+    Your AI-generated study guides will appear here.
+  </p>
+
+
+  <div class="placeholder">
+
+    <div class="placeholder-icon">
+      🧠
+    </div>
+
+    <h2>
+      No study guide yet
+    </h2>
+
+    <p>
+      Upload your notes from the Home page
+      to create your first study guide.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- FLASHCARDS -->
+
+<section
+  id="flashcards"
+  class="page"
+>
+
+  <h1 class="section-title">
+    Flashcards
+  </h1>
+
+  <p class="section-subtitle">
+    Practice important information from your notes.
+  </p>
+
+
+  <div class="placeholder">
+
+    <div class="placeholder-icon">
+      📝
+    </div>
+
+    <h2>
+      No flashcards yet
+    </h2>
+
+    <p>
+      Upload study material to create
+      AI-powered flashcards.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section
+  id="quiz"
+  class="page"
+>
+
+  <h1 class="section-title">
+    Practice Quiz
+  </h1>
+
+  <p class="section-subtitle">
+    Test what you know.
+  </p>
+
+
+  <div class="placeholder">
+
+    <div class="placeholder-icon">
+      ❓
+    </div>
+
+    <h2>
+      No quiz yet
+    </h2>
+
+    <p>
+      Upload your study material to generate
+      practice questions.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- UPGRADE -->
+
+<section
+  id="upgrade"
+  class="page"
+>
+
+  <h1 class="section-title">
+    Upgrade StudyAI
+  </h1>
+
+  <p class="section-subtitle">
+    Unlock more tools for studying.
+  </p>
+
+
+  <div class="pricing">
+
+
+    <div class="price-card">
 
       <h2>
-        Your AI Study Materials
+        Free
       </h2>
 
-      <pre id="resultText"></pre>
+      <div class="price">
+        $0
+      </div>
+
+      <ul>
+
+        <li>
+          ✓ Basic study tools
+        </li>
+
+        <li>
+          ✓ Flashcards
+        </li>
+
+        <li>
+          ✓ Practice quizzes
+        </li>
+
+        <li>
+          ✓ Limited AI generations
+        </li>
+
+      </ul>
+
+      <button
+        class="upgrade-button"
+        onclick="alert('You are using the Free plan.')"
+      >
+        Current Plan
+      </button>
 
     </div>
 
-    <div class="features">
 
-      <div class="feature">
+    <div class="price-card pro">
 
-        <div class="feature-icon">
-          🧠
-        </div>
+      <h2>
+        StudyAI Pro
+      </h2>
 
-        <h3>
-          AI Summaries
-        </h3>
-
-        <p>
-          Turn your notes into simple,
-          easy-to-understand summaries.
-        </p>
-
+      <div class="price">
+        $4.99
+        <span>/month</span>
       </div>
 
-      <div class="feature">
+      <ul>
 
-        <div class="feature-icon">
-          ❓
-        </div>
+        <li>
+          ✓ More AI generations
+        </li>
 
-        <h3>
-          Practice Questions
-        </h3>
+        <li>
+          ✓ Unlimited flashcards
+        </li>
 
-        <p>
-          Generate practice questions
-          from the material you're studying.
-        </p>
+        <li>
+          ✓ More practice quizzes
+        </li>
 
-      </div>
+        <li>
+          ✓ PDF support
+        </li>
 
-      <div class="feature">
+        <li>
+          ✓ Save study sets
+        </li>
 
-        <div class="feature-icon">
-          📝
-        </div>
+      </ul>
 
-        <h3>
-          Flashcards
-        </h3>
-
-        <p>
-          Automatically create flashcards
-          from your notes.
-        </p>
-
-      </div>
+      <button
+        class="upgrade-button"
+        onclick="alert('Payments will be added later.')"
+      >
+        Upgrade to Pro
+      </button>
 
     </div>
 
-  </main>
 
-  <footer>
-    © 2026 StudyAI. Study smarter, not harder.
-  </footer>
+  </div>
 
-  <script>
+</section>
 
-    let selectedFile = null;
 
-    function fileSelected() {
+<footer>
+  © 2026 StudyAI. Study smarter, not harder.
+</footer>
 
-      const input =
-        document.getElementById("fileInput");
 
-      const fileName =
-        document.getElementById("fileName");
+<script>
 
-      const generateButton =
-        document.getElementById("generateButton");
 
-      if (input.files.length === 0) {
-        return;
-      }
+  function showPage(pageId) {
 
-      selectedFile = input.files[0];
+    const pages =
+      document.querySelectorAll(".page");
 
-      fileName.textContent =
-        "Selected: " + selectedFile.name;
+    pages.forEach(function(page) {
 
-      generateButton.style.display =
-        "block";
+      page.classList.remove("active");
+
+    });
+
+
+    document
+      .getElementById(pageId)
+      .classList.add("active");
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  }
+
+
+  let selectedFile = null;
+
+
+  function fileSelected() {
+
+    const input =
+      document.getElementById("fileInput");
+
+    const fileName =
+      document.getElementById("fileName");
+
+    const button =
+      document.getElementById("generateButton");
+
+
+    if (input.files.length === 0) {
+      return;
     }
 
 
-    async function generateStudyMaterials() {
+    selectedFile =
+      input.files[0];
 
-      if (!selectedFile) {
-        alert("Please select a file first.");
-        return;
-      }
 
-      const generateButton =
-        document.getElementById("generateButton");
+    fileName.textContent =
+      "Selected: " + selectedFile.name;
 
-      const result =
-        document.getElementById("result");
 
-      const resultText =
-        document.getElementById("resultText");
+    button.style.display =
+      "block";
 
-      generateButton.disabled = true;
+  }
 
-      generateButton.textContent =
-        "✨ AI is studying your notes...";
 
-      result.style.display = "block";
+  async function generateStudyMaterials() {
 
-      resultText.textContent =
-        "Reading your notes and generating your study materials...";
+    if (!selectedFile) {
 
-      try {
+      alert(
+        "Please select a file first."
+      );
 
-        const notes =
-          await selectedFile.text();
+      return;
 
-        const response =
-          await fetch("/api/generate", {
+    }
+
+
+    const button =
+      document.getElementById("generateButton");
+
+
+    button.textContent =
+      "✨ Generating...";
+
+
+    button.disabled = true;
+
+
+    try {
+
+      const notes =
+        await selectedFile.text();
+
+
+      const response =
+        await fetch(
+          "/api/generate",
+          {
 
             method: "POST",
 
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type":
+                "application/json"
             },
 
             body: JSON.stringify({
               notes: notes
             })
 
-          });
+          }
+        );
 
 
-        const data =
-          await response.json();
+      const data =
+        await response.json();
 
 
-        if (!response.ok) {
+      if (!response.ok) {
 
-          throw new Error(
-            data.error ||
-            "Something went wrong."
-          );
-
-        }
-
-
-        resultText.textContent =
-          data.result;
-
-
-      } catch (error) {
-
-        resultText.textContent =
-          "Error: " + error.message;
+        throw new Error(
+          "AI generation is temporarily unavailable. Please try again later."
+        );
 
       }
 
 
-      generateButton.disabled = false;
-
-      generateButton.textContent =
-        "✨ Generate Study Materials";
-
-    }
+      alert(
+        "Your study materials were generated!"
+      );
 
 
-    function login() {
+      console.log(
+        data.result
+      );
+
+
+    } catch (error) {
 
       alert(
-        "Login is coming soon!"
+        "AI generation is temporarily unavailable. Please try again later."
       );
 
     }
 
-  </script>
+
+    button.textContent =
+      "✨ Generate Study Materials";
+
+
+    button.disabled = false;
+
+  }
+
+
+</script>
+
 
 </body>
 </html>
